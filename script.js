@@ -43,7 +43,6 @@ function load_params() {
       let file = document.createElement("input");
       file.setAttribute("type", "file");
       file.setAttribute("name", "uploads[]");
-      file.defaultValue = `${data[i]["filepath"].split("\\")[1]}`;
 
       let hidden = document.createElement("input");
       hidden.setAttribute("type", "hidden");

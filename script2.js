@@ -13,7 +13,9 @@ function readTextFile(file, callback) {
 }
 
 function load_photos() {
-  let slider = document.getElementsByClassName("slideshow-container")[0];
+  let slider = document.getElementsByClassName("slider")[0];
+  let slides = document.createElement("div");
+  slides.classList.add("slides");
 
   readTextFile("data.json", function (text) {
     if (text.length === 0) {
@@ -32,78 +34,28 @@ function load_photos() {
         return 0;
       });
       for (let i = 0; i < data.length; i++) {
-        let slide = document.createElement("div");
-        slide.classList.add("mySlides");
-        slide.classList.add("fade");
-
-        let numbertext = document.createElement("div");
-        numbertext.classList.add("numbertext");
-
-        let image = document.createElement("img");
-        image.style.width = "100%";
-
-        let caption = document.createElement("div");
-        caption.classList.add("text");
-
-        let dot = document.createElement("span");
-        dot.classList.add("dot");
-
-        numbertext.textContent = `${i + 1} / ${data.length}`;
-        image.src = data[i]["filepath"];
-        caption.textContent = data[i]["caption"];
-        dot.setAttribute("onclick", `currentSlide(${i + 1})`);
-        dotdiv.appendChild(dot);
-        slide.appendChild(numbertext);
-        slide.appendChild(image);
-        slide.appendChild(caption);
-        slider.appendChild(slide);
+        let a = document.createElement("a");
+        a.href = `#slide-${i + 1}`;
+        a.textContent = `${i + 1}`;
+        slider.appendChild(a);
       }
+      for (let i = 0; i < data.length; i++) {
+        let slide = document.createElement("div");
+        slide.id = `slide-${i + 1}`;
 
-      let a1 = document.createElement("a");
-      a1.classList.add("prev");
-      a1.innerHTML = "&#10094;";
-      a1.setAttribute("onclick", "plusSlides(-1)");
+        let img = document.createElement("img");
+        img.src = data[i]["filepath"];
+        img.alt = data[i]["caption"];
 
-      let a2 = document.createElement("a");
-      a2.classList.add("next");
-      a2.innerHTML = "&#10095;";
-      a2.setAttribute("onclick", "plusSlides(1)");
+        let caption = document.createElement("label");
+        caption.textContent = data[i]["caption"];
+        caption.classList.add("author-info");
 
-      slider.appendChild(a1);
-      slider.appendChild(a2);
-
-      showSlides(1);
+        slide.appendChild(img);
+        slide.appendChild(caption);
+        slides.appendChild(slide);
+      }
+      slider.appendChild(slides);
     }
   });
-}
-
-let slideIndex = 1;
-// Next/previous controls
-function plusSlides(n) {
-  showSlides((slideIndex += n));
-}
-
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides((slideIndex = n));
-}
-
-function showSlides(n) {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-  let dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {
-    slideIndex = 1;
-  }
-  if (n < 1) {
-    slideIndex = slides.length;
-  }
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex - 1].style.display = "block";
-  dots[slideIndex - 1].className += " active";
 }
